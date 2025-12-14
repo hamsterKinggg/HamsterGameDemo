@@ -1,35 +1,36 @@
 """
-应用配置模块
-从环境变量读取配置，提供默认值
+app config part
+read config from env, provide init values
 """
+# manage things together that may change in the future
 
 from pydantic_settings import BaseSettings
 from typing import Optional
 
 
 class Settings(BaseSettings):
-    """应用配置类"""
+    """app config class"""
     
-    # 应用基础配置
+    # app basic config
     APP_NAME: str = "HamsterGame"
     DEBUG: bool = True
     
-    # 数据库配置
+    # DB config
     DATABASE_URL: str = "sqlite:///./hamster_game.db"
     
-    # JWT 配置
+    # JWT config
     JWT_SECRET_KEY: str = "your-secret-key-change-in-production"
     JWT_ALGORITHM: str = "HS256"
-    JWT_EXPIRE_HOURS: int = 24 * 7  # Token 有效期：7天
+    JWT_EXPIRE_HOURS: int = 24 * 7  # Token lasts for 7 days
     
-    # 游戏配置
-    MAX_SAVE_SLOTS: int = 3  # 最大存档槽位数
+    # game config
+    MAX_SAVE_SLOTS: int = 3  # max nb of saves
     
-    # 状态值范围
+    # state range
     STAT_MIN: int = 0
     STAT_MAX: int = 100
     
-    # 初始状态值
+    # init states
     INITIAL_STATS: dict = {
         "hunger": 80,
         "energy": 80,
@@ -39,10 +40,10 @@ class Settings(BaseSettings):
     }
     
     class Config:
-        # 从 .env 文件读取环境变量
+        # read environmental varibles from .env file
         env_file = ".env"
         env_file_encoding = "utf-8"
 
 
-# 创建全局配置实例
+# create global config
 settings = Settings()
