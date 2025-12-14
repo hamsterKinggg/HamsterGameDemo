@@ -1,5 +1,5 @@
 """
-仓鼠剧情互动游戏 - 后端入口
+Hamster game Backend Entrance
 """
 
 from fastapi import FastAPI
@@ -11,40 +11,47 @@ from app.db.database import init_db
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """应用生命周期管理"""
-    # 启动时：初始化数据库
-    print(f"正在启动 {settings.APP_NAME}...")
+    """using lifespan"""
+    # define what to do when starting, what to do in the process(yield), and what to do when stopping
+    # init db when starting
+    print(f"******** Starting {settings.APP_NAME}... ********")
     init_db()
-    print("数据库初始化完成")
+    # skip creating if exists
+    print("******** DB init finished ********")
     
-    yield  # 应用运行中
+    yield  # app currently running
     
-    # 关闭时：清理资源（如果需要）
-    print("应用关闭")
+    # clear resources when stopping
+    print("******** app stopped ********")
 
 
-# 创建 FastAPI 应用
+# create FastAPI app
 app = FastAPI(
     title=settings.APP_NAME,
-    description="仓鼠剧情互动游戏后端 API",
+    description="Hamster Game Backend API",
     version="0.1.0",
     lifespan=lifespan
 )
 
+# note: /docs, /redoc, /openapi.json are automaticlly created by fastAPI app. /health is definded by me.
+# no more urls can be visited before db API is finished.
 
-# 健康检查接口
+
+# health check API
 @app.get("/health")
+# if request url /health, will return 200 ok
+# cloud will automaticcly check this
 def health_check():
-    """健康检查"""
+    """health check"""
     return {"status": "ok", "app": settings.APP_NAME}
 
 
 # TODO: 注册各模块路由
 # from app.api import auth, story, item, skin
-# app.include_router(auth.router, prefix="/api/auth", tags=["认证"])
-# app.include_router(story.router, prefix="/api/story", tags=["剧情"])
-# app.include_router(item.router, prefix="/api/item", tags=["道具"])
-# app.include_router(skin.router, prefix="/api/skin", tags=["皮肤"])
+# app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
+# app.include_router(story.router, prefix="/api/story", tags=["Story"])
+# app.include_router(item.router, prefix="/api/item", tags=["Item"])
+# app.include_router(skin.router, prefix="/api/skin", tags=["Skin"])
 
 
 if __name__ == "__main__":
