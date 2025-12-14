@@ -1,6 +1,6 @@
 """
-数据库连接管理模块
-负责创建引擎、会话、以及依赖注入
+DB connection module
+Create engine, session, and manage dependency
 """
 
 from sqlalchemy import create_engine
@@ -10,31 +10,32 @@ from typing import Generator
 from app.core.config import settings
 
 
-# 创建数据库引擎
-# check_same_thread=False 是 SQLite 特有的，允许多线程访问
+# create DB engine
+# check_same_thread=False is only in SQLite，allowing muti thread
 engine = create_engine(
-    settings.DATABASE_URL,
-    connect_args={"check_same_thread": False},  # SQLite 专用
-    echo=settings.DEBUG  # DEBUG 模式下打印 SQL 语句
+    settings.DATABASE_URL,  # this is the path of .db file
+    connect_args={"check_same_thread": False},  # only in SQLite
+    echo=settings.DEBUG  # print SQL languages in debug mode
 )
 
-# 创建会话工厂
+# create session maker
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
     bind=engine
 )
+# many SQL operations together
 
-# 创建模型基类（所有表模型都继承它）
+# create base model class（all table models inheritsmfrom it）
 Base = declarative_base()
 
 
 def get_db() -> Generator[Session, None, None]:
     """
-    获取数据库会话的依赖函数
-    用于 FastAPI 的依赖注入
+    get dependency func of DB session
+    for FastAPI dependencies
     
-    使用方式：
+    how to use：
         @app.get("/example")
         def example(db: Session = Depends(get_db)):
             ...
@@ -48,11 +49,11 @@ def get_db() -> Generator[Session, None, None]:
 
 def init_db() -> None:
     """
-    初始化数据库：创建所有表
-    在应用启动时调用
+    init db: create all table
+    called when starting
     """
-    # 导入所有模型，确保它们被注册到 Base.metadata
+    # import all models, register to Base.metadata
     from app.models import user, save  # noqa: F401
     
-    # 创建所有表（如果不存在）
+    # create tables if not exists
     Base.metadata.create_all(bind=engine)
