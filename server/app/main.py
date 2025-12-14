@@ -45,6 +45,9 @@ def health_check():
     """health check"""
     return {"status": "ok", "app": settings.APP_NAME}
 
+if settings.DEBUG:
+    from app.api import debug
+    app.include_router(debug.router, prefix="/api/debug", tags=["debug"])
 
 # TODO: 注册各模块路由
 # from app.api import auth, story, item, skin
