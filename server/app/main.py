@@ -48,6 +48,7 @@ def health_check():
 if settings.DEBUG:
     from app.api import debug
     app.include_router(debug.router, prefix="/api/debug", tags=["debug"])
+# let app know what routes it can visit
 
 # TODO: 注册各模块路由
 # from app.api import auth, story, item, skin
