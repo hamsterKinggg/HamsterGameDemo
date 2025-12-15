@@ -54,6 +54,10 @@ if settings.DEBUG:
 # register/login API route
 from app.api import auth
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+
+# save issue route
+from app.api import save
+app.include_router(save.router, prefix="/api/save", tags=["save"])
 # -------- API routes --------
 
 # TODO: 注册各模块路由

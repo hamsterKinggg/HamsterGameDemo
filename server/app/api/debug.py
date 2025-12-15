@@ -18,7 +18,7 @@ def list_tables():
     """display all table names"""
     return {
         "tables": ["users", "saves"],
-        "warning": "Debug API - 仅开发环境使用"
+        "warning": "Debug API - only for dev"
     }
 
 
