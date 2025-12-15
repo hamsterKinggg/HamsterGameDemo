@@ -1,6 +1,6 @@
 """
 savers table model
-存储玩家的游戏进度和状态
+store all states and progress of saves
 """
 
 from datetime import datetime
@@ -26,7 +26,7 @@ class Save(Base):
     slot = Column(Integer, nullable=False)
     
     # pet name
-    pet_name = Column(String(32), default="小仓")
+    pet_name = Column(String(32), default="hamster")
     
     # current story node ID
     current_node = Column(String(64), default="start")

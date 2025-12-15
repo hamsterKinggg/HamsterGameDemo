@@ -37,7 +37,8 @@ app = FastAPI(
 # no more urls can be visited before db API is finished.
 
 
-# health check API
+# -------- API routes --------
+# health check API route
 @app.get("/health")
 # if request url /health, will return 200 ok
 # cloud will automaticcly check this
@@ -49,6 +50,11 @@ if settings.DEBUG:
     from app.api import debug
     app.include_router(debug.router, prefix="/api/debug", tags=["debug"])
 # let app know what routes it can visit
+
+# register/login API route
+from app.api import auth
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+# -------- API routes --------
 
 # TODO: 注册各模块路由
 # from app.api import auth, story, item, skin
