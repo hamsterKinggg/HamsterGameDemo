@@ -7,7 +7,9 @@ from contextlib import asynccontextmanager
 
 from app.core.config import settings
 from app.db.database import init_db
+from fastapi.security import HTTPBearer
 
+security = HTTPBearer()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -30,7 +32,8 @@ app = FastAPI(
     title=settings.APP_NAME,
     description="Hamster Game Backend API",
     version="0.1.0",
-    lifespan=lifespan
+    lifespan=lifespan,
+    swagger_ui_parameters={"persistAuthorization": True} # allow auth for all APIs when testing at /doc
 )
 
 # note: /docs, /redoc, /openapi.json are automaticlly created by fastAPI app. /health is definded by me.
